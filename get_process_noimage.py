@@ -228,8 +228,8 @@ if __name__ == "__main__":
         np_image = c.get_current_image()
         #time.sleep(0.5)
         if np_image is not None:
+            np_image = cv2.resize(np_image, (400, 400))
             np_image = cv2.cvtColor(np_image, cv2.COLOR_RGB2BGR)
-            np_image = cv2.resize(np_image, (400,400))
             #cv2.imshow("Ori Image", np_image)
 
             processed_image = closest_color_hsv(np_image)
@@ -252,7 +252,6 @@ if __name__ == "__main__":
             serial.write(data)
             #print("update_test")
             cv2.imshow("Camera Image", x[3])
-            print("test")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     c.stream_off()
