@@ -252,7 +252,7 @@ if __name__ == "__main__":
             data = number.to_bytes(1, 'big')
             serial.write(data)
 
-            cv2.imshow("Camera Image", x[3])
+            #cv2.imshow("Camera Image", x[3])
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     c.stream_off()
