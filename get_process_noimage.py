@@ -254,6 +254,7 @@ if __name__ == "__main__":
 
             #cv2.imshow("Camera Image", x[3])
             print("update")
+            print("update2")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     c.stream_off()
