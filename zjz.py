@@ -5,6 +5,23 @@ from PIL import Image
 from time import sleep
 from periphery import Serial
 serial = Serial("/dev/ttyS0", 9600)
+green_lower = np.array([35, 43, 46], dtype=np.uint8)
+green_upper = np.array([77, 255, 255], dtype=np.uint8)
+
+# Define the color range for yellow in HSV
+yellow_lower = np.array([26, 43, 46], dtype=np.uint8)
+yellow_upper = np.array([34, 255, 255], dtype=np.uint8)
+
+def check_colors(hsv_colors):
+    # Check the first color (row) for being green
+    green_mask = cv2.inRange(hsv_colors[0], green_lower, green_upper)
+    is_first_color_green = green_mask.any()
+
+    # Check the second color (row) for being yellow
+    yellow_mask = cv2.inRange(hsv_colors[1], yellow_lower, yellow_upper)
+    is_second_color_yellow = yellow_mask.any()
+
+    return is_first_color_green and is_second_color_yellow
 def pG(image):
     sigma = 10  # sigma = a * complex_index + b
     blurred_image = cv2.GaussianBlur(image, (5, 5), sigma)
@@ -95,6 +112,8 @@ if __name__ == "__main__":
         np_image=c.get_current_image()
         np_image=cv2.resize(np_image,(400,400))
         control_matrix, centers,control_matrix_uint8=pG(np_image)
+        if(check_colors(centers)==False):
+            control_matrix_uint8=255-control_matrix_uint8
         cv2.imshow("0-1",control_matrix_uint8)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
