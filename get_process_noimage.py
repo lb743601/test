@@ -2,7 +2,6 @@ import time
 
 import cv2
 import numpy as np
-from skimage import feature
 import gxipy as gx
 from PIL import Image
 from time import sleep
