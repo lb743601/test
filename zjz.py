@@ -107,7 +107,7 @@ if __name__ == "__main__":
     c = camera()
     c.open_camera()
     c.stream_on()
-    c.set_ex_gain(10000, 10)
+    c.set_ex_gain(40000, 10)
     while True:
         np_image=c.get_current_image()
         np_image=cv2.resize(np_image,(400,400))
