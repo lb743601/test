@@ -253,6 +253,7 @@ if __name__ == "__main__":
             serial.write(data)
 
             #cv2.imshow("Camera Image", x[3])
+            print("update")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     c.stream_off()
