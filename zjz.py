@@ -22,6 +22,26 @@ def check_colors(hsv_colors):
     is_second_color_yellow = yellow_mask.any()
 
     return is_first_color_green and is_second_color_yellow
+def is_yellow_green(colors):
+    color1, color2 = colors
+
+    # 比较红色和蓝色值来区分黄色和绿色
+    yellow = green = None
+
+    # 黄色的红色值通常比绿色的高，蓝色值较低
+    if color1[0] > color2[0] and color1[2] < color2[2]:
+        yellow = color1
+        green = color2
+    elif color2[0] > color1[0] and color2[2] < color1[2]:
+        yellow = color2
+        green = color1
+
+    # 判断颜色是否已正确分配
+    if yellow is not None and green is not None:
+        return np.array_equal(colors[0], yellow)
+
+    # 如果颜色无法准确判断，则返回False
+    return False
 def pG(image):
     sigma = 10  # sigma = a * complex_index + b
     blurred_image = cv2.GaussianBlur(image, (5, 5), sigma)
@@ -112,7 +132,7 @@ if __name__ == "__main__":
         np_image=c.get_current_image()
         np_image=cv2.resize(np_image,(400,400))
         control_matrix, centers,control_matrix_uint8=pG(np_image)
-        if(check_colors(centers)==False):
+        if(is_yellow_green(centers)):
             control_matrix_uint8=255-control_matrix_uint8
         cv2.imshow("0-1",control_matrix_uint8)
         if cv2.waitKey(1) & 0xFF == ord('q'):
