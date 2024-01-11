@@ -6,7 +6,7 @@ import gxipy as gx
 from PIL import Image
 from time import sleep
 from periphery import Serial
-serial = Serial("/dev/ttyS0", 9600)
+serial = Serial("/dev/ttyUSB0", 9600)
 def calculate_line_equation(x1, y1, x2, y2):
     if x2 - x1 != 0:
         m = (y2 - y1) / (x2 - x1)
@@ -234,24 +234,24 @@ if __name__ == "__main__":
 
             processed_image = closest_color_hsv(np_image)
             processed_image = cv2.GaussianBlur(processed_image, (9, 9), 0)
-            x= detect_and_draw_vertical_line(processed_image)
-            #x[0]为0代表全绿，x[0]为1代表全黄，x[0]为3代表黄绿，x[1]为分割线中点横坐标，x[2]为1则代表左黄右绿，为2代表左绿右黄
-            if(x[0]==0):
-                number=255
-            else:
-                if(x[0]==1):
-                    number=0
-                else:
-                    if(x[2]==1):
-                        number=128+int(100*x[1]/400)
-                    else:
-                        number=int(100*x[1]/400)
-            #11111111为全绿，00000000为全黄，否则1开头为左黄右绿，0开头左绿右黄
-            print(number,x[0],x[1],x[2])
-            data = number.to_bytes(1, 'big')
-            serial.write(data)
+            # x= detect_and_draw_vertical_line(processed_image)
+            # #x[0]为0代表全绿，x[0]为1代表全黄，x[0]为3代表黄绿，x[1]为分割线中点横坐标，x[2]为1则代表左黄右绿，为2代表左绿右黄
+            # if(x[0]==0):
+            #     number=255
+            # else:
+            #     if(x[0]==1):
+            #         number=0
+            #     else:
+            #         if(x[2]==1):
+            #             number=128+int(100*x[1]/400)
+            #         else:
+            #             number=int(100*x[1]/400)
+            # #11111111为全绿，00000000为全黄，否则1开头为左黄右绿，0开头左绿右黄
+            # print(number,x[0],x[1],x[2])
+            #data = number.to_bytes(1, 'big')
+            #serial.write(data)
             #print("update_test")
-            cv2.imshow("Camera Image", x[3])
+            cv2.imshow("Camera Image", processed_image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     c.stream_off()

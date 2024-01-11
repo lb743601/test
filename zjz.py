@@ -1,10 +1,13 @@
+import time
+
 import cv2
 import numpy as np
 import gxipy as gx
 from PIL import Image
+import struct
 from time import sleep
 from periphery import Serial
-serial = Serial("/dev/ttyS0", 9600)
+serial = Serial("/dev/ttyUSB0", 9600)
 green_lower = np.array([35, 43, 46], dtype=np.uint8)
 green_upper = np.array([77, 255, 255], dtype=np.uint8)
 
@@ -134,7 +137,33 @@ if __name__ == "__main__":
         control_matrix, centers,control_matrix_uint8=pG(np_image)
         if(is_yellow_green(centers)):
             control_matrix_uint8=255-control_matrix_uint8
-        cv2.imshow("0-1",control_matrix_uint8)
+        control_matrix_uint8=cv2.resize(control_matrix_uint8,(96,100))
+        # control_matrix = cv2.resize(control_matrix_uint8, (96, 100), interpolation=cv2.INTER_NEAREST)
+        # control_matrix = control_matrix == 1.0
+        cv2.imshow("0-1", control_matrix_uint8)
+
+        b1,b2,b3,b4=np.split(control_matrix_uint8, 4, axis= 0)
+        b1=b1.reshape(1,2400)
+        b2 = b2.reshape(1, 2400)
+        b3 = b3.reshape(1, 2400)
+        b4 = b4.reshape(1, 2400)
+        x=input("enter")
+        for i in range(300):
+            bs1=''.join(['1' if b==255 else '0' for b in b1[0,i*8:i*8+8]])
+            bs2=''.join(['1' if b==255 else '0' for b in b2[0,i*8:i*8+8]])
+            bs3=''.join(['1' if b==255 else '0' for b in b3[0,i*8:i*8+8]])
+            bs4=''.join(['1' if b==255 else '0' for b in b4[0, i * 8:i * 8 + 8]])
+            i1 = int(bs1, 2)
+            i2=int(bs2, 2)
+            i3=int(bs3, 2)
+            i4=int(bs4, 2)
+            byte_representation1 = struct.pack('B', i1)
+            byte_representation2 = struct.pack('B', i2)
+            byte_representation3 = struct.pack('B', i3)
+            byte_representation4 = struct.pack('B', i4)
+            serial.write(byte_representation3)
+
+        #time.sleep(1)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     c.stream_off()
