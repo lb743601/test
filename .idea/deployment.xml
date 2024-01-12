@@ -3,10 +3,17 @@
   <component name="PublishConfigData" autoUpload="Always" serverName="linaro@192.168.0.2:22 password" uploadOnCheckin="804f85ce-6664-4f2b-b7b3-72d4e830057f" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
+      <paths name="aliyun@112.124.71.175:22">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="linaro@192.168.0.2:22 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/image_porcess" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/Downloads/image_porcess" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
